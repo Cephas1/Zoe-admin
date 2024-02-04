@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Reservations - NiceAdmin Bootstrap Template</title>
+  <title>{{ env('APP_NAME') }}</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -36,9 +36,9 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href={{ route('admin.dashboard') }} class="logo d-flex align-items-center">
+      <a href={{ route('dashboard') }} class="logo d-flex align-items-center">
         <img src={{ asset("assets/img/logo.png") }} alt="">
-        <span class="d-none d-lg-block">Matador</span>
+        <span class="d-none d-lg-block">{{ env('APP_NAME') }}</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -50,22 +50,22 @@
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src={{ asset("assets/img/profile-img.jpg") }} alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">Grâce MAHINGA</span>
+            <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Grâce MAHINGA</h6>
-              <span>Manager</span>
+              <h6>{{ Auth::user()->name }}</h6>
+              <span>{{ Auth::user()->email }}</span>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.show') }}">
                 <i class="bi bi-gear"></i>
-                <span>Account Settings</span>
+                <span>Mon profil</span>
               </a>
             </li>
             <li>
@@ -73,10 +73,26 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
+                <form method="POST" action="{{ route('logout') }}" x-data>
+                    @csrf
+
+                    {{-- <x-dropdown-link class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}"
+                                @click.prevent="$root.submit();">
+                        <i class="bi bi-logout"></i>
+                        <span>Déconnexion</span>
+                    </x-dropdown-link> --}}
+
+                    <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Déconnexion</span>
+                    </a>
+
+
+                </form>
+                {{-- <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Déconnexion</span>
+                </a> --}}
             </li>
 
           </ul><!-- End Profile Dropdown Items -->
@@ -92,43 +108,167 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
-	  <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('admin.dashboard') }}">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+        @if(Route::is('dashboard'))
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" href="{{ route('admin.reservations') }}">
-          <i class="bi bi-calendar-plus"></i><span>Réservations</span>
-        </a>
-	  </li>
-      {{-- <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" href="{{ route('admin.depenses') }}">
-          <i class="bi bi-cart4"></i><span>Dépenses</span>
-        </a>
-	  </li> --}}
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" href="{{ route('admin.agences') }}">
-          <i class="bi bi-building"></i><span>Agences</span>
-        </a>
-	  </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#charts-nav" href="{{ route('admin.finances') }}">
-          <i class="bi bi-currency-dollar"></i><span>Finances</span>
-        </a>
-	  </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#icons-nav" href="{{ route('admin.reporting') }}">
-          <i class="bi bi-bar-chart"></i><span>Reporting</span>
-        </a>
-	  </li>
-	  <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" href="{{ route('admin.utilisateurs') }}">
-          <i class="bi bi-gear"></i><span>Utilisateurs</span>
-        </a>
-      </li><!-- End Blank Page Nav -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('dashboard') }}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" href="{{ route('magazins') }}">
+                <i class="bi bi-shop"></i><span>Magasins</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" href="{{ route('services') }}">
+                <i class="bi bi-building"></i><span>Services</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#charts-nav" href="{{ route('fournisseurs') }}">
+                <i class="bi bi-truck"></i><span>Fournisseurs</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#icons-nav" href="{{ route('users') }}">
+                <i class="bi bi-gear"></i><span>Utilisateurs</span>
+                </a>
+            </li><!-- End Blank Page Nav -->
+
+        @elseif(Route::is('magazins'))
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('dashboard') }}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link " data-bs-target="#components-nav" href="{{ route('magazins') }}">
+                <i class="bi bi-calendar-plus"></i><span>Magasins</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" href="{{ route('services') }}">
+                <i class="bi bi-building"></i><span>Services</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#charts-nav" href="{{ route('fournisseurs') }}">
+                <i class="bi bi-currency-dollar"></i><span>Fournisseurs</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#icons-nav" href="{{ route('users') }}">
+                <i class="bi bi-gear"></i><span>Utilisateurs</span>
+                </a>
+            </li><!-- End Blank Page Nav -->
+
+        @elseif(Route::is('services'))
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('dashboard') }}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" href="{{ route('magazins') }}">
+                <i class="bi bi-calendar-plus"></i><span>Magasins</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link " data-bs-target="#tables-nav" href="{{ route('services') }}">
+                <i class="bi bi-building"></i><span>Services</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#charts-nav" href="{{ route('fournisseurs') }}">
+                <i class="bi bi-currency-dollar"></i><span>Fournisseurs</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#icons-nav" href="{{ route('users') }}">
+                <i class="bi bi-gear"></i><span>Utilisateurs</span>
+                </a>
+            </li><!-- End Blank Page Nav -->
+
+        @elseif(Route::is('fournisseurs'))
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('dashboard') }}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" href="{{ route('magazins') }}">
+                <i class="bi bi-calendar-plus"></i><span>Magasins</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" href="{{ route('services') }}">
+                <i class="bi bi-building"></i><span>Services</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-target="#charts-nav" href="{{ route('fournisseurs') }}">
+                <i class="bi bi-currency-dollar"></i><span>Fournisseurs</span>
+                </a>
+            </li>
+
+           <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#icons-nav" href="{{ route('users') }}">
+                <i class="bi bi-gear"></i><span>Utilisateurs</span>
+                </a>
+            </li><!-- End Blank Page Nav -->
+
+        @elseif(Route::is('users'))
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('dashboard') }}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" href="{{ route('magazins') }}">
+                <i class="bi bi-calendar-plus"></i><span>Magasins</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" href="{{ route('services') }}">
+                <i class="bi bi-building"></i><span>Services</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#charts-nav" href="{{ route('fournisseurs') }}">
+                <i class="bi bi-currency-dollar"></i><span>Fournisseurs</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link " data-bs-target="#icons-nav" href="{{ route('users') }}">
+                <i class="bi bi-gear"></i><span>Utilisateurs</span>
+                </a>
+            </li><!-- End Blank Page Nav -->
+        @endif
 
     </ul>
 

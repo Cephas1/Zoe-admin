@@ -53,12 +53,12 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+  <title>{{ env('APP_NAME') }} | Login</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href={{ asset("assets/img/favicon.png") }} rel="icon">
+  <link href={{ asset("favicon.ico") }} rel="icon">
   <link href={{ asset("assets/img/apple-touch-icon.png") }} rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -153,7 +153,7 @@
                       <button class="btn btn-primary w-100" type="submit">Connexion</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Don't have account? <a href="pages-register.html">Create an account</a></p>
+                      <p class="small mb-0">Don't have account? <a href="{{ route('register') }}">Create an account</a></p>
                     </div>
                   </form>
 

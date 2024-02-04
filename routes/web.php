@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MagazinsController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\SuppliersController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,44 +22,42 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::middleware([
+Route::prefix('admin')->middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/dashboard', function () {
+    /*Route::get('/dashboard', function () {
         return view('dashboard');
-    })->name('dashboard');
-});
+    })->name('dashboard');*/
+/*});
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {*/
 
-    Route::get('/dashboard', function () {
-        return view('zoe-admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/reservations', function () {
-        return view('zoe-admin.reservations');
-    })->name('admin.reservations');
+    /*Route::get('/flux', function () {
+        return view('_flux');
+    })->name('flux');*/
 
-    Route::get('/depenses', function () {
-        return view('zoe-admin.depenses');
-    })->name('admin.depenses');
+    Route::get('/magazins', [MagazinsController::class, 'index'])->name('magazins');
+    //Route::get('/magazin', [MagazinsController::class, 'show'])->name('magazin.show');
+    Route::post('/magazin', [MagazinsController::class, 'store'])->name('magazin.store');
+    Route::delete('magazin/{id}', [MagazinsController::class, 'destroy'])->name('magazin.destroy');
+    Route::post('magazin/{id}', [MagazinsController::class, 'edit'])->name('magazin.edit');
 
-    Route::get('/agences', function () {
-        return view('zoe-admin.agences');
-    })->name('admin.agences');
+    Route::get('/services', [ServicesController::class, 'index'])->name('services');
+    Route::delete('service/{id}', [ServicesController::class, 'destroy'])->name('service.destroy');
+    Route::post('service/{id}', [ServicesController::class, 'edit'])->name('service.edit');
 
-    Route::get('/finances', function () {
-        return view('zoe-admin.finances');
-    })->name('admin.finances');
+    Route::get('/suppliers', [SuppliersController::class, 'index'])->name('fournisseurs');
+    Route::delete('supplier/{id}', [SuppliersController::class, 'destroy'])->name('supplier.destroy');
+    Route::post('supplier/{id}', [SuppliersController::class, 'edit'])->name('supplier.edit');
 
-    Route::get('/reporting', function () {
-        return view('zoe-admin.reporting');
-    })->name('admin.reporting');
-
-    Route::get('/utilisateurs', function () {
-        return view('zoe-admin.utilisateurs');
-    })->name('admin.utilisateurs');
+    Route::get('/users', [UsersController::class, 'index'])->name('users');
 
 });
